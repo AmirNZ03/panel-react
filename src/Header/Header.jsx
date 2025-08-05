@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Header.css'
 import { FaAngleDown } from "react-icons/fa6";
 import { IoIosNotifications } from "react-icons/io";
@@ -11,6 +11,8 @@ import Badge from 'react-bootstrap/Badge';
 import Lists from "./Lists"
 import Message from "./Message"
 import Sub from "./Message"
+  import { jwtDecode } from "jwt-decode";
+
 // import NotificationsIcon from '@mui/icons-material/Notifications';
 // import EmailIcon from '@mui/icons-material/Email';
 // import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
@@ -42,7 +44,25 @@ export default function Header() {
  const edit=()=>{
   setSubList(false)
  }
-  
+const [name, setName] = useState("");
+
+    const [image, setImage] = useState("");
+
+useEffect(() => {
+  let token = localStorage.getItem("token");
+  if (token) {
+    token = token.trim(); // حذف فاصله‌ها و کاراکترهای اضافی
+    try {
+      const decoded = jwtDecode(token);
+      console.log("✅ decoded:", decoded);
+      setName(decoded.name);
+            setImage(decoded.image)
+
+    } catch (error) {
+      console.error("❌ خطا در دیکد کردن توکن:", error);
+    }
+  }
+}, []);
   return (
     <>
 
@@ -51,8 +71,14 @@ export default function Header() {
 <div className='pa'>
  <button  onClick={()=>setShowList(true)} id='dps'>
 <FaAngleDown className='ici'/>
-    <p className='hami'>حمید آفرینش فر</p>
-    <img src="./48.png" alt="" className='nac'  />
+    <p className='hami'>{name}</p>
+               {image && (
+  <img
+src={`http://localhost:3001/uploads/${image}`}
+    alt="profile"
+    className='nac'
+  />
+)}
     </button>
     <button className='dart' onClick={()=>setShowMes(true)}>
     <IoIosNotifications />
@@ -77,6 +103,8 @@ export default function Header() {
    
     {/* <img src="./48.png" alt="" /> */}
 </div>
+
+
 {/* <button>
 <NotificationsIcon/>
 </button>

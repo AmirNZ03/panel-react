@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import "./Form.css"
 import { FaAngleUp } from "react-icons/fa6";
 import { FaRegEdit } from "react-icons/fa";
@@ -6,8 +6,64 @@ import { FaRegEye } from "react-icons/fa6";
 import { SiMinutemailer } from "react-icons/si";
 import { FaLock } from "react-icons/fa";
 import { IoIosLock } from "react-icons/io";
+import { jwtDecode } from 'jwt-decode';
 
 export default function Form() {
+  const[password,setPassword]=useState("")
+  const [newpassword,setNewPassword]=useState("")
+  useEffect(() => {
+    let token = localStorage.getItem("token");
+    if (token) {
+      token = token.trim(); // حذف فاصله‌ها و کاراکترهای اضافی
+      try {
+        const decoded = jwtDecode(token);
+        console.log("✅ decoded:", decoded);
+        setPassword(decoded.password);
+
+      } catch (error) {
+        console.error("❌ خطا در دیکد کردن توکن:", error);
+      }
+    }
+  }, [password]);
+ 
+          const handleclick=()=>{
+           
+                let token = localStorage.getItem("token");
+                 
+                          const decodef = jwtDecode(token);
+                 console.log("iddec",decodef.id);
+                 
+
+      fetch("http://localhost:3001/api/users/edit/password", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+     id:decodef.id,
+      password: newpassword,
+    }),
+  })
+  .then((res) => res.json())
+  .then((data) => {
+    if (data.token) {
+    localStorage.setItem("token", data.token); // 🆕 توکن جدید رو ذخیره کن
+  }
+ swal({
+  title: "رمز عبور با موفقیت تغییر یافت",
+  icon: "success",
+  button: {
+    text: "باشه",
+    closeModal: true
+  },
+  dangerMode: true
+});
+decodef.password=newpassword
+    })
+  
+ 
+  }
+  
   return (
     <div className='matmx'>
       <div className='qo'>
@@ -39,18 +95,19 @@ export default function Form() {
 </div>
 <div className='xpa'>
 <p className='lfl'>رمز عبور پیشین</p>
-<input type="password" className='lasq' />
+<input type="text" className='lasq' value={password} />
 </div>
 <div className='xpa'>
 <p className='lfl'>رمز عبور جدید</p>
-<input type="password" className='lasq' />
+<input type="text" className='lasq'  value={newpassword} onChange={(e)=>setNewPassword(e.target.value)}/>
 </div>
 <div id='ali'>
   <button className='baz'>بازگشت</button>
-  <button className='zah'>ذخیره</button>
+  <button className='zah' onClick={handleclick}>ذخیره</button>
 </div>
 </div>
 
       </div>
   )
 }
+

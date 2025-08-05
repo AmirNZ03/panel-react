@@ -11,6 +11,7 @@ import { FaUsers } from "react-icons/fa";
 import { CiDiscount1 } from "react-icons/ci";
 import jwt_decode from "jwt-decode";
 
+import { jwtDecode } from "jwt-decode";
 
 // const bch=(event)=>{
 // event.target.style.backgroundColor="blueviolet"
@@ -25,19 +26,18 @@ export default function Navbar
 
 () {
     const [name, setName] = useState("");
+    const [image, setImage] = useState("");
 
-//   let vc=document.querySelector(".coli")
-//   const ses=()=>{
-// vc.style.visibility="visible"
-//   }
+
 useEffect(() => {
   let token = localStorage.getItem("token");
   if (token) {
     token = token.trim(); // حذف فاصله‌ها و کاراکترهای اضافی
     try {
-      const decoded = jwt_decode(token);
+      const decoded = jwtDecode(token);
       console.log("✅ decoded:", decoded);
       setName(decoded.name);
+      setImage(decoded.image)
     } catch (error) {
       console.error("❌ خطا در دیکد کردن توکن:", error);
     }
@@ -47,7 +47,7 @@ useEffect(() => {
   return (
     <div className='coli'>
 <div className='as'>
-  <p>حمید آفرینش فر</p>
+  <p style={{fontSize:"15px"}}>{name}</p>
   <p className='ma'>خوش آمدید</p>
 </div>
 <div className='navi'>
@@ -60,7 +60,7 @@ useEffect(() => {
 </div>
 <div className='la'>
   <div className='xa'>
-    <p className='nj'>حمید آفرینش فر</p>
+    <p className='nj'>{name}</p>
     <p className='fa'>مدیر فنی</p>
     <div className='yi'>
       <div className='nz'>
@@ -71,7 +71,13 @@ useEffect(() => {
 
  
   </div>
-  <img src="./48.png" alt="" className='dpal' />
+           {image && (
+  <img
+src={`http://localhost:3001/uploads/${image}`}
+    alt="profile"
+    className='dpal'
+  />
+)}
 </div>
 <div className='nzl' >
   <NavLink to="/main"   className={({ isActive }) => (isActive ? 'active' : '')}>

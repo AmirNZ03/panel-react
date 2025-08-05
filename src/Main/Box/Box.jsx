@@ -55,7 +55,7 @@ export default function Box() {
         <span id='ami'>
           <TiMessages/>
         </span>
-          <p className='nvc' ></p>
+          <p className='nvc' >256</p>
           <p className='yas'>پیام</p>
         </div>
              

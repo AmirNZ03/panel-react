@@ -37,6 +37,16 @@ console.log(products);
     .then((result) => {
       console.log("محصول ویرایش شد:", result);
       setIsShowEditModal(false);
+      
+      swal({
+        title: `محصول با موفقیت حذف شد`,
+        icon: "success",
+        button: {
+          text: "باشه",
+          closeModal: true
+        },
+        dangerMode: true
+      });
       // لیست محصولات را دوباره بگیر
       fetch("http://localhost:3001/api/products")
         .then((res) => res.json())
@@ -70,6 +80,16 @@ console.log(products);
     .then((result) => {
       console.log("محصول ویرایش شد:", result);
       setIsShowEditModal(false);
+      
+      swal({
+        title: `محصول با موفقیت ویرایش شد`,
+        icon: "success",
+        button: {
+          text: "باشه",
+          closeModal: true
+        },
+        dangerMode: true
+      });
       // لیست محصولات را دوباره بگیر
       fetch("http://localhost:3001/api/products")
         .then((res) => res.json())

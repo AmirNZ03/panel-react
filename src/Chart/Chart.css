@@ -16,6 +16,11 @@
     margin-left: 26rem;
     margin-top: 1rem;
 }
+#lf{
+    color: var(--ds);
+    margin-left: 40rem;
+    margin-top: 1rem;  
+}
 .lfn{
     color: var(--ds);
     margin-left: 18rem;
@@ -27,12 +32,20 @@
     margin-top: 1rem;
 }
 .paqs{
-    width: 15rem;
+    width: 13rem;
     background-color: var(--vn);
     margin-left: 18rem;
     margin-top: 2rem;
     border-radius: 0.5rem; 
     color: var(--ds);
+}
+#paqs{
+   width: 27rem;
+    background-color: var(--vn);
+    margin-left: 22rem;
+    margin-top: 2rem;
+    border-radius: 0.5rem; 
+    color: var(--ds);  
 }
 .paqsx{
     width: 15rem;

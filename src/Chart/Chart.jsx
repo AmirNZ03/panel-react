@@ -1,10 +1,68 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import "./Chart.css"
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { FaAngleUp } from "react-icons/fa6";
 import { FaRegEdit } from "react-icons/fa";
+import { jwtDecode } from 'jwt-decode';
 
 export default function Chart() {
+
+  const[name,setName]=useState("")
+  const[phone,setPhone]=useState("")
+  const[image,setImage]=useState("")
+  useEffect(() => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    const decoded = jwtDecode(token);
+    setName(decoded.name || "");
+    setPhone(decoded.phone || "");
+    setImage(decoded.image || "");
+  }
+}, []);
+
+            const handleclick=()=>{
+             
+                  let token = localStorage.getItem("token");
+                   
+                            const decodef = jwtDecode(token);
+                        
+
+                                                                                 
+
+                   console.log("iddec",decodef.id);
+const formData = new FormData();
+formData.append("id", decodef.id);
+formData.append("name", name);
+formData.append("phone", phone);
+formData.append("image", image);
+        fetch("http://localhost:3001/api/users/edit/profile", {
+
+      method: "PUT",
+      
+      body:formData
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.token) {
+      localStorage.setItem("token", data.token);
+         const decoded = jwtDecode(data.token); // 🆕
+    setName(decoded.name || "");
+    setPhone(decoded.phone || "");
+    setImage(decoded.image || ""); // 🆕 توکن جدید رو ذخیره کن
+    }
+   swal({
+    title: "اطلاعات شما با موفقیت ویرایش شد",
+    icon: "success",
+    button: {
+      text: "باشه",
+      closeModal: true
+    },
+    dangerMode: true
+  });
+      })
+    
+   
+    }
   return (
     <div className='kds'>
       <div className='qo'>
@@ -42,9 +100,16 @@ export default function Chart() {
     </div>
             </div>
         
-    <img src="./48.png" alt="" className='hd' />
           </div>
-          <input type="file" name="" id="" className='lasq' placeholder='برای آپلود کلیک کنید' />
+          {image && (
+  <img
+src={`http://localhost:3001/uploads/${image}`}
+    alt="profile"
+    style={{ width: "100px", height: "100px", borderRadius: "50%" ,marginLeft:"37rem", marginTop:"-6rem" }}
+  />
+)}
+
+          <input type="file" name="" id="" className='lasq' placeholder='برای آپلود کلیک کنید'  onChange={(e)=>setImage(e.target.files[0])} />
           
           <div></div>
           <div className='line'>
@@ -52,17 +117,14 @@ export default function Chart() {
 </div>
           <div className='mxz'>
             <div className='alex'>
-              <p className='lf'>نام خانوادگی</p>
-            <input type="text" className='paqs' />
+              <p id='lf'>نام و نام خانوادگی</p>
+            <input type="text" id='paqs' value={name} onChange={(e)=>setName(e.target.value)} />
             </div>
-            <div className='alex'>
-              <p className='lfn'>نام</p>
-            <input type="text" className='paqsx'  />
-            </div>
+          
           </div>
           <div className='alex'>
             <p className='lfl'>موبایل</p>
-            <input type="text" className='lasq' placeholder='09---------' />
+            <input type="text" className='lasq' placeholder='09---------' value={phone} onChange={(e)=>setPhone(e.target.value)} />
           </div>
           <div className='alex'>
             <p className='lfl'>ایمیل</p>
@@ -100,7 +162,7 @@ export default function Chart() {
          
           <div id='ali'>
   <button className='baz'>بازگشت</button>
-  <button className='zah'>ذخیره</button>
+  <button className='zah' onClick={handleclick}>ذخیره</button>
 </div>
           
         </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import "./register.css";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
-
+import swal from 'sweetalert';
 export default function Register() {
   const [error, setError] = useState("");
   const [phone, setPhone] = useState("");
@@ -39,12 +39,28 @@ const handleSubmit = (e) => {
   })
   .then((res) => res.json())
   .then((data) => {
+       if (data.error === "اکانت شما مسدود شده است") {
+ swal({
+  title: "اکانت شما مسدود شده است",
+  icon: "warning",
+  button: {
+    text: "باشه",
+    closeModal: true
+  },
+  dangerMode: true
+});
+
+    }
     if (data.token) {
       localStorage.setItem("token", data.token);
       navigate("/main");
+
     } else if (data.error) {
       setErrors(data.error);
+  
+     
     } else {
+
       setErrors("ثبت نام ناموفق بود");
     }
   })
