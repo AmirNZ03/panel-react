@@ -51,6 +51,18 @@ const handleSubmit = (e) => {
 });
 
     }
+        if (data.error === "این شماره تلفن قبلا ثبت نام کرده است") {
+ swal({
+  title: "این شماره تلفن قبلا ثبت نام کرده است",
+  icon: "warning",
+  button: {
+    text: "باشه",
+    closeModal: true
+  },
+  dangerMode: true
+});
+
+    }
     if (data.token) {
       localStorage.setItem("token", data.token);
       navigate("/main");

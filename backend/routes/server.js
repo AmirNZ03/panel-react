@@ -173,15 +173,25 @@ app.post("/api/users", (req, res) => {
       return res.status(403).json({ error: "اکانت شما مسدود شده است" });
       
     }
+const checktwo=`SELECT * FROM users WHERE phone=?`
+  productsDB.query(checktwo, [phone], (twoErr, twoResult) => {
 
-    const sql = `INSERT INTO users (name, phone, password) VALUES (?, ?, ?)`;
-    const values = [name, phone, password];
+   if (twoErr) return res.status(500).json({ error: "خطای سرور" });
+
+    if (twoResult.length > 0) {
+      return res.status(403).json({ error: "این شماره تلفن قبلا ثبت نام کرده است" });
+      
+    }
+ 
+    const sql = `INSERT INTO users (name, phone, password,image) VALUES (?, ?, ?,?)`;
+    const image="gray-user-profile-icon-png-fP8Q1P.png"
+    const values = [name, phone, password,image];
 
     productsDB.query(sql, values, (error, result) => {
       if (error) return res.status(500).json({ error: "خطا در ثبت‌نام" });
 
       const token = jwt.sign(
-        { id: result.insertId, phone, name,password },
+        { id: result.insertId, phone, name,password,image },
         process.env.JWT_SECRET,
         { expiresIn: "1d" }
       );
@@ -190,7 +200,7 @@ app.post("/api/users", (req, res) => {
     });
   });
 });
-
+})
 
 
 
@@ -224,7 +234,9 @@ app.post("/api/users/login", (req, res) => {
           id: result[0].id, 
           phone: result[0].phone, 
           name: result[0].name,
-          password:result[0].password
+          password:result[0].password,
+                    image:result[0].image
+
         },
         process.env.JWT_SECRET,
         { expiresIn: "1d" }

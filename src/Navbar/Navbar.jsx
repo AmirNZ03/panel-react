@@ -71,7 +71,7 @@ useEffect(() => {
 
  
   </div>
-           {image && (
+               {image && (
   <img
 src={`http://localhost:3001/uploads/${image}`}
     alt="profile"
